@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  dev-server:
+    working_dir: /application
+    build:
+      context: .
+      dockerfile: ci/docker/Dockerfile
+      target: dev-server
+    volumes:
+      - .:/application:delegated
+
+  dev-client:
+    working_dir: /application
+    build:
+      context: .
+      dockerfile: ci/docker/Dockerfile
+      target: dev-client
+    volumes:
+      - .:/application:delegated
+
+  server:
+    build:
+      context: .
+      dockerfile: ci/docker/Dockerfile
+      target: server
+    ports:
+      - "8080:8080"
+
+  client:
+    build:
+      context: .
+      dockerfile: ci/docker/Dockerfile
+      target: client
+    ports:
+      - "8081:8081"
