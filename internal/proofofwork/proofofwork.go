@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/big"
 	"math/rand"
+	"pow/internal/challenge"
 	"time"
 )
 
@@ -18,20 +19,18 @@ var (
 const targetBits = 24
 
 type ProofOfWork struct {
-	Challenge []byte
+	Challenge challenge.Challenge
 	Nonce     int
 	target    *big.Int
 }
 
 // NewProofOfWork builds and returns a ProofOfWork
-func NewProofOfWork() *ProofOfWork {
+func NewProofOfWork(c challenge.Challenge) *ProofOfWork {
 	rand.Seed(time.Now().Unix())
 	target := big.NewInt(1)
 	target.Lsh(target, uint(256-targetBits))
-	challenge := make([]byte, 8)
-	rand.Read(challenge)
 
-	return &ProofOfWork{challenge, 0, target}
+	return &ProofOfWork{c, 0, target}
 }
 
 func (pow *ProofOfWork) prepareData(nonce int) []byte {
